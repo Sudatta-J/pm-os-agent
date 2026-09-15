@@ -8,30 +8,37 @@
 
 List every discrete decision or action in your agent's workflow, then score each one and place it **above** the line (a human owns it) or **below** (the agent owns it). Borderline calls get an HITL checkpoint.
 
-| Decision / action | First-pass placement | Reason |
-|---|---|---|
-| Pull project state + recent GitHub/Jira activity | Below | Cortex can safely gather read-only status, activity, and roadmap facts without changing anything. |
-| Decide relevant context | Below | Cortex can narrow the working context from known sources, as long as the sources are bounded and traceable. |
-| Draft the update | Below | Drafting is reversible and stays private until a human reviews it. |
-| Decide tone / commitment level | Above | Tone and commitment level can imply promises to leadership, so a human should own that judgment. |
-| Flag at-risk escalation | Below | Cortex can identify possible risk signals from the data and surface them for review. |
-| Choose what to escalate | Above | Escalation changes stakeholder attention and priority, so the human should decide what actually gets raised. |
-| Propose a capped story batch | Below | Cortex can suggest a limited set of next-sprint stories, with the cap preventing runaway backlog changes. |
-| Post an update / approve a company-wide one | Above | Publishing creates external visibility and possible commitments, so it needs explicit human approval. |
+| Decision / action | First-pass placement | Reason | Reversibility (H/M/L) | Blast radius (H/M/L) | Measurability (H/M/L) | Final Above / Below | HITL? |
+|---|---|---|---|---|---|---|---|
+| Pull project state + recent GitHub/Jira activity | Below | Cortex can safely gather read-only status, activity, and roadmap facts without changing anything. | H | L | H | Below | No |
+| Decide relevant context | Below | Cortex can narrow the working context from known sources, as long as the sources are bounded and traceable. | H | M | M | HITL | Spot-check |
+| Draft the update | Below | Drafting is reversible and stays private until a human reviews it. | H | M | H | Below | Review before publish |
+| Decide tone / commitment level | Above | Tone and commitment level can imply promises to leadership, so a human should own that judgment. | M | H | M | Above | Required |
+| Flag at-risk escalation | Below | Cortex can identify possible risk signals from the data and surface them for review. | H | M | H | Below | Review before action |
+| Choose what to escalate | Above | Escalation changes stakeholder attention and priority, so the human should decide what actually gets raised. | M | H | M | Above | Required |
+| Propose a capped story batch | Below | Cortex can suggest a limited set of next-sprint stories, with the cap preventing runaway backlog changes. | M | M | H | HITL | Required approval |
+| Post an update / approve a company-wide one | Above | Publishing creates external visibility and possible commitments, so it needs explicit human approval. | L | H | H | Above | Required |
 
 ## Agent anatomy (sketch)
 
-- **Model:** _your default fast model + when you escalate to a frontier model, and why_
-- **Tools:** _project + activity lookup (read) · past-update search · roadmap · team norms · story proposal (capped) …_
-- **Memory:** _what persists across runs (roadmap, decisions, norms) vs. purged_
-- **Loop:** _placeholder, defined in M2 loop-spec.md_
-- **Bounds:** _placeholder, defined in M5 bounds-and-evals.md_
-- **Evals:** _placeholder, defined in M5 bounds-and-evals.md_
+- **Model:** Default to a fast, low-cost model for routine drafting and retrieval; escalate to a stronger frontier model when the critic rejects twice, context conflicts, or the update may affect leadership commitments.
+- **Tools:** Read-only project lookup, recent activity lookup, past-update search, roadmap lookup, team norms lookup, and capped story proposal for human approval.
+- **Memory:** Persist stable roadmap facts, past decisions, previous updates, and team norms; purge run-specific scratch notes, temporary drafts, and anything marked confidential unless it is needed for the current bounded run.
+- **Loop:** Placeholder, defined in M2 `loop-spec.md`.
+- **Bounds:** Placeholder, defined in M5 `bounds-and-evals.md`; current build includes max iterations, revision cap, cost cap, and story queue cap.
+- **Evals:** Placeholder, defined in M5 `bounds-and-evals.md`; current build already uses a critic pass/fail check before anything reaches the human review checkpoint.
 
 ## The golden rule, applied
 
-_One sentence per above-the-line decision: why it stays human (which of reversibility / blast radius / measurability failed)._
+- Pull project state + recent GitHub/Jira activity sits below the line because it is high to reverse, has a low blast radius, and is high to verify; deciding factor: low blast radius.
+- Decide relevant context sits at HITL because it is high to reverse, has a medium blast radius, and is medium to verify; deciding factor: measurability.
+- Draft the update sits below the line because it is high to reverse, has a medium blast radius, and is high to verify before it leaves draft state; deciding factor: reversibility.
+- Decide tone / commitment level sits above the line because it is medium to reverse, has a high blast radius, and is medium to verify; deciding factor: blast radius.
+- Flag at-risk escalation sits below the line because it is high to reverse, has a medium blast radius, and is high to verify against source data; deciding factor: measurability.
+- Choose what to escalate sits above the line because it is medium to reverse, has a high blast radius, and is medium to verify; deciding factor: blast radius.
+- Propose a capped story batch sits at HITL because it is medium to reverse, has a medium blast radius, and is high to verify against the PRD; deciding factor: reversibility.
+- Post an update / approve a company-wide one sits above the line because it is low to reverse, has a high blast radius, and is high to verify only after the message has already created visibility; deciding factor: blast radius.
 
 ## Hardest call
 
-_Your toughest "above vs below" decision and how you resolved it. (Share this in `#cohort-channel`.)_
+The hardest call was whether Cortex should choose what to escalate. I resolved it above the line because the blast radius is too high: even a well-reasoned escalation can redirect leadership attention, change priorities, or create anxiety, so Cortex should flag risk signals but a human should decide what actually gets raised.
