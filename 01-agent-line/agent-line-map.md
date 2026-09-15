@@ -8,16 +8,16 @@
 
 List every discrete decision or action in your agent's workflow, then score each one and place it **above** the line (a human owns it) or **below** (the agent owns it). Borderline calls get an HITL checkpoint.
 
-| Decision / action | First-pass placement | Reason | Reversibility (H/M/L) | Blast radius (H/M/L) | Measurability (H/M/L) | Final Above / Below | HITL? |
+| Decision / action | Reversibility (H/M/L) | Blast radius (H/M/L) | Measurability (H/M/L) | Rule result | Agent line | HITL checkpoint | First-pass reason |
 |---|---|---|---|---|---|---|---|
-| Pull project state + recent GitHub/Jira activity | Below | Cortex can safely gather read-only status, activity, and roadmap facts without changing anything. | H | L | H | Below | No |
-| Decide relevant context | Below | Cortex can narrow the working context from known sources, as long as the sources are bounded and traceable. | H | M | M | HITL | Spot-check |
-| Draft the update | Below | Drafting is reversible and stays private until a human reviews it. | H | M | H | Below | Review before publish |
-| Decide tone / commitment level | Above | Tone and commitment level can imply promises to leadership, so a human should own that judgment. | M | H | M | Above | Required |
-| Flag at-risk escalation | Below | Cortex can identify possible risk signals from the data and surface them for review. | H | M | H | Below | Review before action |
-| Choose what to escalate | Above | Escalation changes stakeholder attention and priority, so the human should decide what actually gets raised. | M | H | M | Above | Required |
-| Propose a capped story batch | Below | Cortex can suggest a limited set of next-sprint stories, with the cap preventing runaway backlog changes. | M | M | H | HITL | Required approval |
-| Post an update / approve a company-wide one | Above | Publishing creates external visibility and possible commitments, so it needs explicit human approval. | L | H | H | Above | Required |
+| Pull project state + recent GitHub/Jira activity | H | L | H | All-green | Below | None | Cortex can safely gather read-only status, activity, and roadmap facts without changing anything. |
+| Decide relevant context | H | M | M | Borderline | Below | Human spot-checks selected sources before the draft is treated as complete. | Cortex can narrow the working context from known sources, as long as the sources are bounded and traceable. |
+| Draft the update | H | M | H | Borderline | Below | Human reviews the draft before it can be published or shared broadly. | Drafting is reversible and stays private until a human reviews it. |
+| Decide tone / commitment level | M | H | M | Any-red | Above | Human approval required before tone or commitments are finalized. | Tone and commitment level can imply promises to leadership, so a human should own that judgment. |
+| Flag at-risk escalation | H | M | H | Borderline | Below | Human reviews flagged risks before any action or escalation happens. | Cortex can identify possible risk signals from the data and surface them for review. |
+| Choose what to escalate | M | H | M | Any-red | Above | Human approval required for the escalation decision. | Escalation changes stakeholder attention and priority, so the human should decide what actually gets raised. |
+| Propose a capped story batch | M | M | H | Borderline | Below | Human approves, rejects, or edits the queued stories before sprint planning. | Cortex can suggest a limited set of next-sprint stories, with the cap preventing runaway backlog changes. |
+| Post an update / approve a company-wide one | L | H | H | Any-red | Above | Human approval required before anything is posted. | Publishing creates external visibility and possible commitments, so it needs explicit human approval. |
 
 ## Agent anatomy (sketch)
 
@@ -31,12 +31,12 @@ List every discrete decision or action in your agent's workflow, then score each
 ## The golden rule, applied
 
 - Pull project state + recent GitHub/Jira activity sits below the line because it is high to reverse, has a low blast radius, and is high to verify; deciding factor: low blast radius.
-- Decide relevant context sits at HITL because it is high to reverse, has a medium blast radius, and is medium to verify; deciding factor: measurability.
-- Draft the update sits below the line because it is high to reverse, has a medium blast radius, and is high to verify before it leaves draft state; deciding factor: reversibility.
+- Decide relevant context sits below the line with a HITL spot-check because it is high to reverse, has a medium blast radius, and is medium to verify; deciding factor: measurability.
+- Draft the update sits below the line with review before publish because it is high to reverse, has a medium blast radius, and is high to verify before it leaves draft state; deciding factor: reversibility.
 - Decide tone / commitment level sits above the line because it is medium to reverse, has a high blast radius, and is medium to verify; deciding factor: blast radius.
-- Flag at-risk escalation sits below the line because it is high to reverse, has a medium blast radius, and is high to verify against source data; deciding factor: measurability.
+- Flag at-risk escalation sits below the line with human review before action because it is high to reverse, has a medium blast radius, and is high to verify against source data; deciding factor: measurability.
 - Choose what to escalate sits above the line because it is medium to reverse, has a high blast radius, and is medium to verify; deciding factor: blast radius.
-- Propose a capped story batch sits at HITL because it is medium to reverse, has a medium blast radius, and is high to verify against the PRD; deciding factor: reversibility.
+- Propose a capped story batch sits below the line with required human approval because it is medium to reverse, has a medium blast radius, and is high to verify against the PRD; deciding factor: reversibility.
 - Post an update / approve a company-wide one sits above the line because it is low to reverse, has a high blast radius, and is high to verify only after the message has already created visibility; deciding factor: blast radius.
 
 ## Hardest call
