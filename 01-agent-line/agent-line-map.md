@@ -30,14 +30,14 @@ List every discrete decision or action in your agent's workflow, then score each
 
 ## The golden rule, applied
 
-- Pull project state + recent GitHub/Jira activity sits below the line because it is high to reverse, has a low blast radius, and is high to verify; deciding factor: low blast radius.
-- Decide relevant context sits below the line with a HITL spot-check because it is high to reverse, has a medium blast radius, and is medium to verify; deciding factor: measurability.
-- Draft the update sits below the line with review before publish because it is high to reverse, has a medium blast radius, and is high to verify before it leaves draft state; deciding factor: reversibility.
-- Decide tone / commitment level sits above the line because it is medium to reverse, has a high blast radius, and is medium to verify; deciding factor: blast radius.
-- Flag at-risk escalation sits below the line with human review before action because it is high to reverse, has a medium blast radius, and is high to verify against source data; deciding factor: measurability.
-- Choose what to escalate sits above the line because it is medium to reverse, has a high blast radius, and is medium to verify; deciding factor: blast radius.
-- Propose a capped story batch sits below the line with required human approval because it is medium to reverse, has a medium blast radius, and is high to verify against the PRD; deciding factor: reversibility.
-- Post an update / approve a company-wide one sits above the line because it is low to reverse, has a high blast radius, and is high to verify only after the message has already created visibility; deciding factor: blast radius.
+- Pull project state + recent GitHub/Jira activity sits below the line because it is all-green: high reversibility, low blast radius, and high measurability make read-only gathering safe for Cortex to own.
+- Decide relevant context sits below the line with a HITL spot-check because the medium blast radius and medium measurability make it borderline, so Cortex can select sources but a human should verify the frame.
+- Draft the update sits below the line with review before publish because the draft is highly reversible and highly measurable, while its medium blast radius is controlled by keeping it private.
+- Decide tone / commitment level sits above the line because the high blast radius is a red score: tone can imply promises or leadership commitments even when the text is measurable.
+- Flag at-risk escalation sits below the line with human review before action because Cortex's signal detection is reversible and measurable, but the medium blast radius means flags should not become escalation automatically.
+- Choose what to escalate sits above the line because the high blast radius is a red score: escalation changes stakeholder attention and priorities, so the final call stays human-owned.
+- Propose a capped story batch sits below the line with required approval because the medium reversibility and medium blast radius make it borderline, so Cortex may queue suggestions but not turn them into commitments.
+- Post an update / approve a company-wide one sits above the line because low reversibility and high blast radius are red scores, making publication a human-owned action even when the content is easy to audit.
 
 ## Hardest call
 
