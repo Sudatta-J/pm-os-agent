@@ -8,14 +8,16 @@
 
 List every discrete decision or action in your agent's workflow, then score each one and place it **above** the line (a human owns it) or **below** (the agent owns it). Borderline calls get an HITL checkpoint.
 
-| Decision / action | Reversibility (H/M/L) | Blast radius (H/M/L) | Measurability (H/M/L) | Above / Below | HITL? |
-|---|---|---|---|---|---|
-| _Pull project state + recent GitHub/Jira activity_ | H | L | H | Below | · |
-| _Draft the weekly leadership status update_ | H | M | M | Below | spot-check |
-| _Propose next sprint's stories from the PRD (within cap)_ | M | M | M | Below | spot-check |
-| _Post the update to a channel / commit a ship date_ | L | H | M | Above | required |
-| _Mark a launch gate green / merge or close a ticket_ | L | H | M | Above | required |
-| _…_ | | | | | |
+| Decision / action | First-pass placement | Reason |
+|---|---|---|
+| Pull project state + recent GitHub/Jira activity | Below | Cortex can safely gather read-only status, activity, and roadmap facts without changing anything. |
+| Decide relevant context | Below | Cortex can narrow the working context from known sources, as long as the sources are bounded and traceable. |
+| Draft the update | Below | Drafting is reversible and stays private until a human reviews it. |
+| Decide tone / commitment level | Above | Tone and commitment level can imply promises to leadership, so a human should own that judgment. |
+| Flag at-risk escalation | Below | Cortex can identify possible risk signals from the data and surface them for review. |
+| Choose what to escalate | Above | Escalation changes stakeholder attention and priority, so the human should decide what actually gets raised. |
+| Propose a capped story batch | Below | Cortex can suggest a limited set of next-sprint stories, with the cap preventing runaway backlog changes. |
+| Post an update / approve a company-wide one | Above | Publishing creates external visibility and possible commitments, so it needs explicit human approval. |
 
 ## Agent anatomy (sketch)
 
