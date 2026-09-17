@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0d1117"/>
+  <rect x="44" y="36" width="1192" height="648" rx="14" fill="#111827" stroke="#374151"/>
+  <text x="72" y="86" fill="#93c5fd" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700">CORTEX RUN, fixture: task-happy</text>
+  <text x="72" y="128" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="20">Task: Weekly leadership status update + next-sprint stories</text>
+  <text x="72" y="160" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="20">Project: P-NORTH (Northstar)</text>
+
+  <rect x="72" y="196" width="1136" height="118" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="232" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">TOOLS USED</text>
+  <text x="96" y="264" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">get_project · get_norms · get_activity · get_roadmap · search_past_updates</text>
+  <text x="96" y="292" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Drafted update + proposed stories for human review; nothing posted.</text>
+
+  <rect x="72" y="344" width="1136" height="128" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="380" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">LAST DRAFT EXCERPT</text>
+  <text x="96" y="412" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Weekly Leadership Status Update: Northstar (P-NORTH)</text>
+  <text x="96" y="440" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Merged PRs #812 and #815 · Open issue #818 · Activation 41%, up from 39%</text>
+  <text x="96" y="468" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Proposed stories queued for approval, not committed.</text>
+
+  <rect x="72" y="504" width="1136" height="104" rx="8" fill="#3b1d06" stroke="#92400e"/>
+  <text x="96" y="540" fill="#fdba74" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="700">STOP CONDITION: revision cap fired</text>
+  <text x="96" y="572" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="18">CRITIC rejected 2x; Cortex stopped revising and escalated to a human.</text>
+  <text x="96" y="600" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="18">Run cost ≈ $0.0049 · LAST DRAFT held · NOT posted.</text>
+
+  <rect x="72" y="636" width="1136" height="40" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="96" y="662" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="18">Saved draft -&gt; 00-build/run-output/status-update-happy.md</text>
+</svg>
