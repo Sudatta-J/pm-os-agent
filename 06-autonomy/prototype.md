@@ -21,12 +21,17 @@ Real screenshots of *your* Cortex running. These are the `00-build/CORTEX-ANATOM
 
 | # | Screenshot | What it shows | From |
 |---|---|---|---|
-| 1 | _[img]_ | happy-path run: a real drafted update + the HITL checkpoint (queued, not posted) | M2 |
+| 1 | ![M2 missing-data escalation](screenshots/m2-missing-data-escalation.svg) | real run showing missing project data, validated `ESCALATE`, and the HITL checkpoint: queued for review, nothing posted, no commitments made | M2 |
 | 2 | _[img]_ | the critic rejecting a bad draft (revise/block) | M3 |
 | 3 | _[img]_ | a grounded update citing pulled activity + a caught hallucination | M4 |
 | 4 | _[img]_ | jailbreak refused + escalated | M5 |
 | 5 | _[img]_ | an iteration/cost/queue bound halting a runaway | M5 |
 | 6 | _[img]_ | end-to-end run | M6 |
+
+### M2 Run Notes
+
+- `task-happy` produced a real draft but hit the revision-cap stop after the critic rejected it twice; saved at `00-build/run-output/status-update-happy.md`.
+- `missing-data` produced a validated escalation because `P-HALO` was not found and Cortex could not commit a GA date without project context; saved at `00-build/run-output/status-update-missing-data.md`.
 
 ## How to run it
 

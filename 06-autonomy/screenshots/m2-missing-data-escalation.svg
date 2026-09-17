@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0d1117"/>
+  <rect x="44" y="36" width="1192" height="648" rx="14" fill="#111827" stroke="#374151"/>
+  <text x="72" y="86" fill="#93c5fd" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700">CORTEX RUN, fixture: task-missing-data</text>
+  <text x="72" y="128" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="20">Task: Status update + confirm the GA date</text>
+  <text x="72" y="160" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="20">Project: P-HALO (Project Halo)</text>
+
+  <rect x="72" y="200" width="1136" height="92" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="236" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">[step 1] TOOL get_project({'project_id': 'P-HALO'})</text>
+  <text x="96" y="268" fill="#fca5a5" font-family="Menlo, Consolas, monospace" font-size="18">-&gt; {"error": "project_not_found", "hint": "no such project in the system"}</text>
+
+  <rect x="72" y="324" width="1136" height="104" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="360" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">[step 8] PROPOSED OUTPUT</text>
+  <text x="96" y="392" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">ESCALATE: Project P-HALO does not exist in the system, and the GA date</text>
+  <text x="96" y="420" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">cannot be committed without project context.</text>
+
+  <rect x="72" y="460" width="1136" height="104" rx="8" fill="#052e16" stroke="#166534"/>
+  <text x="96" y="496" fill="#86efac" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="700">CRITIC: verdict = pass</text>
+  <text x="96" y="528" fill="#dcfce7" font-family="Menlo, Consolas, monospace" font-size="18">HITL CHECKPOINT: status update + proposed stories queued for review.</text>
+  <text x="96" y="556" fill="#dcfce7" font-family="Menlo, Consolas, monospace" font-size="18">Nothing posted, no commitments made. Run cost ≈ $0.0046.</text>
+
+  <rect x="72" y="596" width="1136" height="48" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="96" y="626" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="18">Saved draft -&gt; 00-build/run-output/status-update-missing-data.md</text>
+</svg>
