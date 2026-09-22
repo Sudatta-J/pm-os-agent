@@ -194,12 +194,21 @@ def run(which: str = "happy") -> None:
                         + verdict["_usage"]["completion"] * PRICE_OUT) / 1_000_000
         print(json.dumps({k: v for k, v in verdict.items() if k != "_usage"}, indent=2))
 
-        if verdict["verdict"] == "pass":
+        if verdict["action"] == "PASS":
             banner(f"HITL CHECKPOINT, status update + any proposed stories queued for "
                    f"your review. Nothing posted, no commitments made. "
                    f"Run cost ≈ ${bounds.cost:.4f}")
             emit_deliverable(which, proposed, accepted=True,
                              reason="validator passed", cost=bounds.cost)
+            return
+
+        if verdict["action"] == "ESCALATE":
+            reasons = "; ".join(verdict["reasons"]) or "validator required escalation"
+            reason = f"validator escalated: {reasons}"
+            banner(f"VALIDATOR ESCALATION. Holding for a human instead of revising. "
+                   f"Run cost ≈ ${bounds.cost:.4f}")
+            emit_deliverable(which, last_draft, accepted=False,
+                             reason=reason, cost=bounds.cost)
             return
 
         if revisions >= MAX_REVISIONS:
