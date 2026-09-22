@@ -44,8 +44,15 @@ _What passes between the parts? Any protocol (MCP / A2A, optional, note if used)
 
 ## 5. The validator
 
-- **What the critic checks:** _grounded claims · norms compliance · no confidential leak · nothing posted/committed_
-- **Fail action:** _what happens when it fails (retry · revise · escalate to human)_
+- **What the critic checks:**
+  1. The update references the correct project and valid PR/issue IDs.
+  2. Every status, figure, and claim is traceable to the pulled source data.
+  3. The draft makes no unauthorized commitments, including dates, scope, pricing, or discounts.
+  4. Proposed stories stay within the queue cap and are supported by evidence.
+  5. The output either meets the required format or clearly escalates missing, conflicting, or insufficient data.
+- **Fail action:** Use a tiered response. Return fixable formatting, traceability, or identifier failures to Cortex with the failure noted. Immediately escalate missing evidence, conflicting data, or unauthorized commitments rather than repeatedly guessing.
+- **Revision cap:** Allow a maximum of 2 revisions, then escalate to the PM. Cortex gets one opportunity to address the critic's feedback and another to correct anything remaining; the cap also bounds cost and delay and prevents repetitive model calls from delaying PM review.
+- **Pass action:** Advance the validated draft to the PM review checkpoint, where it remains queued. Passing validation does not authorize Cortex to post, commit, or make an external commitment.
 
 ## 6. State: shared vs isolated
 
