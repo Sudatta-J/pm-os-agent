@@ -74,4 +74,6 @@ Isolation helps avoid bias or influence, preserves the evaluator's independent p
 
 ## 7. Cost & latency budget
 
-_Coordination has a price. Rough token/latency cost of the fleet vs a single agent. (Forward-link to M5 bounds.)_
+Use the single-agent Cortex run as the baseline (`1x`): it has no independent validation call and reaches PM review with the lowest token use and latency, but it also grades its own work.
+
+The recommended Cortex + validator fleet adds one serial critic call in the normal case, so plan for roughly `1.5-2x` the baseline token use and one additional model-round-trip of latency. At the two-revision cap, the worst case adds three critic calls and two Cortex redrafts, so plan for roughly `3-5x` the baseline token use and up to five additional serial model round trips before escalation. These are planning estimates, not measured benchmarks; the existing `$0.50` whole-run cost cap remains the hard upper bound.
