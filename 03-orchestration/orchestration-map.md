@@ -21,26 +21,36 @@ Cortex gathers project evidence on a schedule or high-signal event, drafts a gro
 
 ## 2. Topology
 
-**Pattern:** _single+subagents · sequential · parallel+aggregate · hierarchical_
+**Pattern:** Single agent + one sequential validator subagent
 
 ```
-[ simple text diagram of the flow ]
-e.g.  task → [Research] + [GitHub/Jira reader] → [Writer] → [Critic ✓] → human checkpoint → queued
+[Scheduled run or high-signal event]
+                |
+                v
+[Cortex: pull evidence and draft update + proposed stories]
+                |
+                v
+[Validator]
+    fail, fixable -> Cortex revises (maximum 2 revisions)
+    fail, unsafe/unresolvable -> escalate to PM
+    pass -> PM review checkpoint -> queued
 ```
 
 ## 3. Roster
 
 | Agent / subagent | Responsibility | Runs which Loop Spec |
 |---|---|---|
-| _Chief-of-staff (Cortex)_ | _orchestrates + assembles the update_ | _M2 loop_ |
-| _Research subagent_ | _pulls competitive / market context_ | _research loop_ |
-| _GitHub/Jira reader_ | _summarizes recent activity_ | _read loop_ |
-| _Critic / Validator_ | _checks the draft before it advances_ | _validation loop_ |
-| _…_ | | |
+| Cortex PM Chief of Staff | Pulls project evidence, drafts the status update and proposed stories, responds to fixable validator feedback, and routes the result. | M2 Loop Spec |
+| Independent Validator | Checks grounding, identifiers, commitments, queue limits, and output completeness; returns fixable failures or escalates unsafe or unresolvable ones. | M3 validation loop |
 
 ## 4. Communication & hand-offs
 
-_What passes between the parts? Any protocol (MCP / A2A, optional, note if used)._
+The current build uses a plain in-process structured hand-off; MCP or A2A is not needed yet.
+
+1. Cortex sends the validator the source evidence, drafted update, proposed stories, project and issue identifiers, and current revision number.
+2. The validator returns `PASS`, `REVISE`, or `ESCALATE`, plus failed rule IDs and concise reasons.
+3. On `REVISE`, Cortex receives only the verdict and actionable failures.
+4. On `PASS` or `ESCALATE`, Cortex packages the draft, evidence references, verdict, and stop reason for the PM review checkpoint.
 
 ## 5. The validator
 
@@ -56,7 +66,11 @@ _What passes between the parts? Any protocol (MCP / A2A, optional, note if used)
 
 ## 6. State: shared vs isolated
 
-_What's shared across the fleet vs kept isolated per subagent (carry from M2)._
+- **Shared:** Source evidence, project and issue IDs, current draft, proposed stories, revision number, validation verdict, failed rule IDs, and final stop reason.
+- **Isolated to Cortex:** Drafting scratch work and private reasoning.
+- **Isolated to the validator:** Evaluation reasoning and internal analysis; Cortex receives only the verdict and concise actionable failures.
+
+Isolation helps avoid bias or influence, preserves the evaluator's independent perspective, and retains its gap analysis for the PM's final discretion.
 
 ## 7. Cost & latency budget
 
