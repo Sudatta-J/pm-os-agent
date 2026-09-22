@@ -8,7 +8,16 @@
 
 ## 1. Why split? (or why not)
 
-_Run the default-to-simple check. Do you actually need subagents/a fleet? What's the real reason (separation of concerns · parallelism · independent validation · context-window pressure)? If not, say so and stop here._
+Cortex gathers project evidence on a schedule or high-signal event, drafts a grounded status update, validates the result, and either sends it to the PM review checkpoint or escalates when it cannot proceed safely.
+
+| Reason | Applies? | Why / why not |
+|---|---|---|
+| Separation of concerns | No | Evidence gathering and drafting are one coherent workflow, so splitting them would add coordination without a clear benefit. |
+| Parallelism | No | Drafting depends on the evidence pull, and validation depends on the draft, so the workflow is primarily sequential. |
+| Independent validator | Yes | Having an independent validator review the draft provides fresh context, an additional perspective, and a meaningful safety check that may identify gaps, unsupported claims, unauthorized commitments, and missing evidence before PM review. |
+| Context-window pressure | No, for now | The current fixture-backed workflow is small enough that context size does not justify splitting the drafting work. |
+
+**Decision:** Split minimally. One independent validator subagent will review the draft, bring a fresh perspective, and identify any gaps without turning the whole workflow into a multi-agent system.
 
 ## 2. Topology
 
