@@ -8,7 +8,14 @@
 
 ## 1. Context budget
 
-_What does each loop iteration actually receive, and why? (You can't fit everything, what's the priority order?)_
+Each Cortex loop should receive the smallest set of context that preserves intent, evidence, safety, and reviewability. Priority order:
+
+1. **Current task brief (`get_task`)** - the source of intent, constraints, and the approval boundary for the run.
+2. **Current project record (`get_project`)** - bounded project facts that scope the update and prevent project confusion.
+3. **Current activity slice (`get_activity`)** - fresh PRs, issues, and metrics that support the claims in the update.
+4. **Current team norms (`get_norms`)** - the guardrails that keep Cortex below the agent line.
+5. **Relevant roadmap slice (`get_roadmap`)** - launch/confidentiality constraints and strategic context for the project.
+6. **Relevant past updates and decisions (`search_past_updates`)** - format and precedent, used last because stale history should not override current evidence.
 
 ## 2. Retrieve vs. long-context: per source
 
@@ -16,10 +23,11 @@ For each data source, decide: **retrieve** (narrow a large/changing corpus to th
 
 | Source | Size / volatility | Decision | Why |
 |---|---|---|---|
-| _Roadmap_ | _large, slow-changing_ | _Retrieve_ | _too big to include; need the relevant slice (and respect confidential flags)_ |
-| _GitHub/Jira activity_ | _large, changing_ | _Retrieve_ | _… + audit/citation needs_ |
-| _This week's task brief_ | _bounded_ | _Long-context_ | _reason over the whole thing_ |
-| _Team norms / playbook_ | _bounded_ | _Long-context_ | _… _ |
+| `get_activity` | Large and changing quickly as PRs, issues, and metrics accumulate. | Retrieve | Retrieve `get_activity` because engineering activity grows and changes quickly, and Cortex only needs the current project's relevant PRs/issues/metrics with citations, not the whole activity history in every prompt. |
+| `search_past_updates` | Unbounded history; useful precedent can become stale. | Retrieve | Retrieve `search_past_updates` because prior updates and decision logs grow over time, and Cortex needs the relevant precedent or format example without dragging stale history into every run. |
+| `get_roadmap` | Medium now, but contains unrelated projects and confidential flags. | Retrieve | Retrieve `get_roadmap` because the roadmap includes confidential and unrelated items, so Cortex should pull the relevant project slice plus safety flags instead of carrying the whole roadmap into every update. |
+| `get_norms` | Medium and policy-like; must remain current. | Retrieve | Retrieve `get_norms` because the current team norms are the guardrails that keep Cortex below the agent line; pulling the relevant rule each run lets it cite the exact no-posting, no-GA-date, and confidential-handling constraint instead of relying on stale or assumed policy. |
+| `get_task` | Small, bounded, and authoritative for the run. | Long-context | Keep `get_task` in long context because the task brief is the run's source of intent and authority; Cortex needs the full request, constraints, and "nothing goes out until review" boundary visible throughout the run, not reconstructed from a partial retrieval. |
 
 ## 3. Retrieval quality plan
 
