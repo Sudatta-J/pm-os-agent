@@ -44,16 +44,16 @@ Every retrieved source needs at least one agentic move so Cortex is not just emb
 
 | Memory type | What Cortex stores | Scope / TTL |
 |---|---|---|
-| **Working** (in-loop) | _…_ | _this run_ |
-| **Episodic** (past runs) | _past status updates, decisions_ | _…_ |
-| **Semantic** (durable facts/prefs) | _team norms, roadmap facts_ | _…_ |
-| **Shared** (across agents) | _…_ | _…_ |
+| **Working** (in-loop) | Current task brief, current project record, retrieved activity, norms, roadmap slice, selected past-update examples, and validator notes. | This run only; discarded after the PM review outcome is recorded. |
+| **Episodic** (past runs) | Prior run summaries, final held/approved drafts, reviewer decisions, escalation reasons, and what evidence supported the outcome. | Keep for 90 days or until the project closes, then archive/delete according to retention policy. |
+| **Semantic** (durable facts/prefs) | Durable team preferences and policy-like facts: status format, no-posting rule, no-GA-date rule, confidential-handling rule, and preferred evidence standards. | Refresh from source norms/roadmap before each run; do not treat remembered policy as authoritative. |
+| **Shared** (across agents) | Cross-agent handoff state: draft, validator findings, failed checks, evidence IDs, HITL decision, and revision count. | Limited to the active workflow; visible only to Cortex, validator, and PM reviewer. |
 
 ## 5. Memory risks & mitigations
 
-| Risk | Mitigation |
-|---|---|
-| _Drift_ | _…_ |
-| _Poisoning_ | _…_ |
-| _Staleness_ | _…_ |
-| _Confidential / retention_ | _scoping + flags (Cortex touches embargoed roadmap)_ |
+| Risk | Where it bites Cortex | Mitigation |
+|---|---|---|
+| **Drift** | Remembered preferences or old status patterns slowly diverge from current PM/team expectations. | Treat source tools as authoritative, refresh norms/roadmap before each run, and make the validator check whether remembered patterns conflict with current evidence. |
+| **Poisoning** | Bad prior updates, misleading activity, or unsafe instructions get retrieved and reused as precedent. | Grade retrieved documents, prefer authoritative source records over prior prose, isolate user/task instructions from source content, and escalate when evidence conflicts. |
+| **Staleness** | Old roadmap, launch dates, metrics, or norms get reused after they changed. | Use short caching windows, show dates/evidence IDs for retrieved facts, and require current-source verification for metrics, launch status, and confidential flags. |
+| **PII / retention** | Drafts, reviewer notes, or activity logs may store sensitive PM/team data longer or wider than needed. | Minimize stored data, keep shared memory scoped to the active workflow, set TTLs for episodic memory, and avoid storing confidential roadmap details outside approved project scope. |
