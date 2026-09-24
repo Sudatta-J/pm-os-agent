@@ -31,13 +31,14 @@ For each data source, decide: **retrieve** (narrow a large/changing corpus to th
 
 ## 3. Retrieval quality plan
 
-_Which of these apply, and how? (This is what separates modern agentic retrieval from naive "embed → top-k → stuff".)_
+Every retrieved source needs at least one agentic move so Cortex is not just embedding, stuffing, and hoping. The retrieval plan is:
 
-- **Routing**: _which source to query?_
-- **Document grading**: _is what I retrieved actually relevant?_
-- **Reranking**: _…_
-- **Self-verification**: _did the update use the retrieved evidence?_
-- **Caching**: _…_
+| Source | Routing | Document grading | Reranking | Self-verification | Caching | Why |
+|---|---|---|---|---|---|---|
+| `get_activity` | Yes | Yes | No | Yes | No | Pull the right project's PRs/issues/metrics, reject irrelevant activity, and verify every metric or PR claim traces back to retrieved activity. |
+| `search_past_updates` | Yes | Yes | Yes | No | No | Search the right project/theme, rank the closest precedent first, and avoid stale or unrelated matches overriding current evidence. |
+| `get_roadmap` | Yes | Yes | No | Yes | No | Retrieve the relevant project slice plus safety flags, reject unrelated roadmap context, and verify the draft does not leak embargoed work or invent a GA commitment. |
+| `get_norms` | Yes | Yes | No | Yes | Same-day | Pull the relevant rule, confirm it applies, verify the draft obeys no-posting/no-GA-date/confidentiality constraints, and refresh before a later run so stale policy does not linger. |
 
 ## 4. Memory map (your PM brain)
 
