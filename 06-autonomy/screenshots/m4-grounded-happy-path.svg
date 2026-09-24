@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0d1117"/>
+  <rect x="44" y="36" width="1192" height="648" rx="14" fill="#111827" stroke="#374151"/>
+  <text x="72" y="86" fill="#93c5fd" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700">M4 grounding run: task-happy</text>
+  <text x="72" y="128" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="20">Project: P-NORTH (Northstar) · refreshed data pack ingested</text>
+
+  <rect x="72" y="172" width="1136" height="150" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="208" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">RETRIEVED SOURCES</text>
+  <text x="96" y="240" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">get_project: P-NORTH, Sprint 25, PRD-Northstar-v3</text>
+  <text x="96" y="268" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">get_activity: PR #820, PR #823, open issue #825, activation 43% prior 41%</text>
+  <text x="96" y="296" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">get_norms + get_roadmap: no posting, review required, confidential flags checked</text>
+
+  <rect x="72" y="354" width="1136" height="150" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="390" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">DRAFT CLAIMS GROUNDED IN PULLED DATA</text>
+  <text x="96" y="422" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Merged Day-2 milestone email (#820) and Empty-state guidance copy (#823).</text>
+  <text x="96" y="450" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Open issue: Contextual tips A/B analytics review (#825), normal severity.</text>
+  <text x="96" y="478" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">Metric: activation increased from 41% to 43% week over week.</text>
+
+  <rect x="72" y="536" width="1136" height="92" rx="8" fill="#3b1d06" stroke="#92400e"/>
+  <text x="96" y="572" fill="#fdba74" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="700">VALIDATOR HELD THE DRAFT FOR HUMAN REVIEW</text>
+  <text x="96" y="604" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="18">Critic escalated instead of posting. Saved draft: 00-build/run-output/status-update-happy.md</text>
+
+  <text x="72" y="666" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="18">Run cost approximately $0.0015 · nothing posted</text>
+</svg>
