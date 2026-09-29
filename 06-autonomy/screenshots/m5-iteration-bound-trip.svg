@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0d1117"/>
+  <rect x="44" y="36" width="1192" height="648" rx="14" fill="#111827" stroke="#374151"/>
+  <text x="72" y="86" fill="#93c5fd" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700">M5 external-bound proof: task-happy</text>
+  <text x="72" y="128" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="20">Command: CORTEX_MAX_ITERATIONS=2 python3 agent.py happy</text>
+
+  <rect x="72" y="168" width="1136" height="156" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="204" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">STEP 1 · READ-ONLY EVIDENCE</text>
+  <text x="96" y="238" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="17">get_project(P-NORTH), get_activity(P-NORTH), past updates, roadmap, and norms</text>
+  <text x="96" y="280" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">STEP 2 · PROPOSE ONLY</text>
+  <text x="96" y="310" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="17">One story queued for approval; nothing was created in the tracker.</text>
+
+  <rect x="72" y="354" width="1136" height="132" rx="8" fill="#3b1d06" stroke="#92400e"/>
+  <text x="96" y="394" fill="#fdba74" font-family="Menlo, Consolas, monospace" font-size="20" font-weight="700">MAX ITERATIONS (2) REACHED WITHOUT FINISHING</text>
+  <text x="96" y="432" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="18">The external counter stopped the next model/tool step and escalated to a human.</text>
+  <text x="96" y="466" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="18">Stop reason preserved: max iterations (2) reached.</text>
+
+  <rect x="72" y="518" width="1136" height="90" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="554" fill="#86efac" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="700">SAFE RESULT</text>
+  <text x="96" y="588" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">No final draft, publish, wrong send, infinite loop, or excess spend.</text>
+
+  <text x="72" y="650" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="18">Run cost approximately $0.0006 · hard per-run cost cap remained $0.50</text>
+</svg>
