@@ -10,13 +10,13 @@
 
 | Bound | Value / policy | Which Cortex risk it caps |
 |---|---|---|
-| **Max iterations** | _e.g. 8_ | _runaway reasoning loop_ |
-| **Timeout** | _e.g. 90s/run_ | _hung tool call_ |
-| **Token / cost budget** | _e.g. $X per run_ | _cost blow-up_ |
-| **Auto-queue / commitment cap** | _e.g. max 10 stories per run_ | _flooding the backlog / over-committing scope_ |
-| **Permissions (JIT / ephemeral)** | _read-only access; no standing post/merge rights_ | _confidential leak / unapproved post ("control starts at infrastructure")_ |
-| **Kill switch** | _who/what halts it_ | _everything_ |
-| **HITL checkpoints** | _above-the-line decisions from agent-line-map_ | _irreversible actions (post / commit date / merge)_ |
+| **Max iterations** | `8` model/tool steps per run, then stop and escalate with the trace. | Runaway reasoning loop on a stuck or ambiguous task. |
+| **Timeout** | `90s` wall-clock timeout per run, then stop and escalate. | Hung tool or API call freezing the workflow. |
+| **Token / cost budget** | `$0.50` hard cap per run; stop before the next model call if the estimated cost would exceed it. | Runaway spend or repeated retries burning budget. |
+| **Auto-queue / commitment cap** | Max `10` queued stories/actions per run; no launch/date commitments may be queued automatically. | Flooding the backlog or creating implied commitments. |
+| **Permissions (JIT / ephemeral)** | Cortex has standing read-only access only. Any write, publish, queue, escalation, or commitment action requires human approval at the relevant HITL checkpoint and receives a single-use, short-lived permission scoped to the exact action, project, destination, and time window. The permission expires after one use or timeout, cannot be reused for adjacent actions, and is logged with the approving human, requested action, evidence, and result. | Misused or leaked standing access, confidential leak, or unauthorized write/publish action. |
+| **Kill switch** | A PM or admin kill switch immediately cancels active Cortex runs, blocks new runs, revokes unused JIT permissions, freezes all queued actions, and preserves the trace, draft, tool calls, and cost record for review. Restart requires an explicit human reset after the issue is classified and any unsafe queue items are cleared. | A misbehaving or compromised agent continuing to spend, loop, queue work, or act on temporary permissions. |
+| **HITL checkpoints** | Cortex must pause for explicit human approval at seven checkpoints: before any update is posted or shared outside the draft, before tone or commitment language is finalized, before a launch/GA/date commitment is stated, before any risk is escalated to a stakeholder channel, before queued stories enter sprint planning or a backlog tool, before selected context is accepted as complete for a high-impact update, and before flagged risks are treated as the official escalation set. Enforcement is outside the model: Cortex can draft, flag, and queue, but write/publish/escalation permissions stay unavailable until a human approves that exact action. | Cortex acting above the agent line without a human, especially publication, commitments, escalation, or backlog impact. |
 
 ## 2. Failure-mode register
 
