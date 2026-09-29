@@ -28,9 +28,10 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
-from openai import OpenAI
+from openai import APITimeoutError, OpenAI
 
 import tools
 from critic import review
@@ -49,6 +50,9 @@ MAX_ITERATIONS = int(os.environ.get("CORTEX_MAX_ITERATIONS", "8"))
 MAX_REVISIONS = int(os.environ.get("CORTEX_MAX_REVISIONS", "2"))
 COST_CAP_USD = float(os.environ.get("CORTEX_COST_CAP_USD", "0.50"))
 MAX_QUEUE_ITEMS = int(os.environ.get("CORTEX_MAX_QUEUE_ITEMS", "10"))
+TIMEOUT_SECONDS = float(os.environ.get("CORTEX_TIMEOUT_SECONDS", "90"))
+KILL_SWITCH_FILE = Path(os.environ.get(
+    "CORTEX_KILL_SWITCH_FILE", str(Path(__file__).parent / ".cortex-stop")))
 # Rough $ per 1M tokens for your chosen model, set to match its pricing.
 PRICE_IN = float(os.environ.get("CORTEX_PRICE_IN_PER_M", "0.15"))
 PRICE_OUT = float(os.environ.get("CORTEX_PRICE_OUT_PER_M", "0.60"))
@@ -88,10 +92,11 @@ TOOL_SCHEMAS = [
 
 
 class Bounds:
-    """Tracks spend and trips the cost cap. This is enforced OUTSIDE the model."""
+    """Tracks spend and elapsed time. These bounds live outside the model."""
 
     def __init__(self):
         self.cost = 0.0
+        self.started_at = time.monotonic()
 
     def add(self, usage) -> None:
         self.cost += (usage.prompt_tokens * PRICE_IN
@@ -99,6 +104,28 @@ class Bounds:
 
     def over_cap(self) -> bool:
         return self.cost >= COST_CAP_USD
+
+    def elapsed(self) -> float:
+        return time.monotonic() - self.started_at
+
+    def remaining(self) -> float:
+        return max(0.0, TIMEOUT_SECONDS - self.elapsed())
+
+
+def kill_switch_active() -> bool:
+    env_value = os.environ.get("CORTEX_KILL_SWITCH", "").strip().lower()
+    return env_value in {"1", "true", "yes", "on"} or KILL_SWITCH_FILE.exists()
+
+
+def external_stop_reason(bounds: Bounds) -> str | None:
+    """Return the first operator or runtime bound that requires an immediate stop."""
+    if kill_switch_active():
+        return "operator kill switch activated"
+    if bounds.elapsed() >= TIMEOUT_SECONDS:
+        return f"wall-clock timeout ({TIMEOUT_SECONDS:g}s) reached"
+    if bounds.over_cap():
+        return f"cost cap ${COST_CAP_USD} hit at ${bounds.cost:.4f}"
+    return None
 
 
 OUTPUT_DIR = Path(__file__).parent / "run-output"
@@ -138,7 +165,6 @@ def emit_deliverable(which: str, draft: str, *, accepted: bool,
 
 
 def run(which: str = "happy") -> None:
-    client = OpenAI()
     bounds = Bounds()
     task = tools.get_task(which)
     if "error" in task:
@@ -157,21 +183,35 @@ def run(which: str = "happy") -> None:
     last_draft = ""
 
     for step in range(1, MAX_ITERATIONS + 1):
-        if bounds.over_cap():
-            reason = f"cost cap ${COST_CAP_USD} hit at ${bounds.cost:.4f}"
+        reason = external_stop_reason(bounds)
+        if reason:
             banner(f"BOUND TRIPPED, {reason}. Halting and escalating to a human.")
             emit_deliverable(which, last_draft, accepted=False,
                              reason=reason, cost=bounds.cost)
             return
 
-        resp = client.chat.completions.create(
-            model=MODEL, messages=messages, tools=TOOL_SCHEMAS)
+        client = OpenAI(timeout=max(bounds.remaining(), 0.1))
+        try:
+            resp = client.chat.completions.create(
+                model=MODEL, messages=messages, tools=TOOL_SCHEMAS)
+        except APITimeoutError:
+            reason = f"wall-clock timeout ({TIMEOUT_SECONDS:g}s) reached during model call"
+            banner(f"BOUND TRIPPED, {reason}. Halting and escalating to a human.")
+            emit_deliverable(which, last_draft, accepted=False,
+                             reason=reason, cost=bounds.cost)
+            return
         bounds.add(resp.usage)
         msg = resp.choices[0].message
 
         if msg.tool_calls:
             messages.append(msg)
             for call in msg.tool_calls:
+                reason = external_stop_reason(bounds)
+                if reason:
+                    banner(f"BOUND TRIPPED, {reason}. Halting and escalating to a human.")
+                    emit_deliverable(which, last_draft, accepted=False,
+                                     reason=reason, cost=bounds.cost)
+                    return
                 fn = call.function.name
                 args = json.loads(call.function.arguments or "{}")
                 result = tools.TOOLS[fn](**args)
@@ -188,7 +228,21 @@ def run(which: str = "happy") -> None:
         print(f"\n[step {step}] PROPOSED OUTPUT:\n{proposed}")
 
         banner("CRITIC, independent validation")
-        verdict = review(client, MODEL, proposed, "\n".join(source_log))
+        reason = external_stop_reason(bounds)
+        if reason:
+            banner(f"BOUND TRIPPED, {reason}. Halting and escalating to a human.")
+            emit_deliverable(which, last_draft, accepted=False,
+                             reason=reason, cost=bounds.cost)
+            return
+        try:
+            critic_client = OpenAI(timeout=max(bounds.remaining(), 0.1))
+            verdict = review(critic_client, MODEL, proposed, "\n".join(source_log))
+        except APITimeoutError:
+            reason = f"wall-clock timeout ({TIMEOUT_SECONDS:g}s) reached during critic call"
+            banner(f"BOUND TRIPPED, {reason}. Halting and escalating to a human.")
+            emit_deliverable(which, last_draft, accepted=False,
+                             reason=reason, cost=bounds.cost)
+            return
         # Estimate critic spend too.
         bounds.cost += (verdict["_usage"]["prompt"] * PRICE_IN
                         + verdict["_usage"]["completion"] * PRICE_OUT) / 1_000_000
