@@ -1,110 +1,74 @@
 # Cortex: PM Chief-of-Staff Agent
 
-> My final project for Product School's **Agentic Loops for PMs** certification. A chief-of-staff agent that turns raw inputs (project state, GitHub/Jira activity, roadmap, past updates) into finished PM work, a leadership status update and a proposed backlog for a human to clear, built loop-first, bounded, grown into a fleet, and shipped up the Trust Ladder.
+Cortex is a bounded PM agent that turns current project evidence into a leadership status draft and a capped set of next-sprint proposals. An independent validator checks every output before it reaches the PM review checkpoint. Cortex never publishes, commits a launch date, changes incident status, or writes to a source system without explicit human approval.
 
-This is a **template repo**. Click **Use this template → Create a new repository**, name it `pm-os-agent` (or your own agent's name), and fill in one folder per module as you go.
+**Current Trust Ladder rung:** Assisted<br>
+**Launch recommendation:** Approve a serverless assisted pilot for experienced PMs, then widen autonomy only after the defined four-week evidence gate passes.
 
----
+## Final pitch
 
-## The story this repo tells
+Open [`pitch.html`](pitch.html) for the 10-slide capstone deck. Use the on-screen controls or the arrow keys to navigate.
 
-Strategy first, structure second. This repo is the **build journey of one agent, Cortex**, laid out as the exact sequence of decisions a PM makes when shipping an AI agent team. **Each folder is one framework from the course**, in the order you actually use it, and each ends in a **validation point** — a deliverable, a validator, or an eval — that proves the step is sound before you build on the next one.
+## What Cortex does
 
-Read it top to bottom as a narrative:
+1. A Monday schedule, approved high-signal hook, or human request starts a run.
+2. Cortex retrieves current project, engineering, roadmap, norms, and historical context.
+3. It drafts a grounded status update and queues at most 10 story proposals for approval.
+4. An independent validator returns `PASS`, `REVISE`, or `ESCALATE`.
+5. Cortex stops at PM review or preserves the trace and escalates. Nothing is posted automatically.
 
-| # | The move (story beat) | Framework | Folder | What this step validates |
-|---|---|---|---|---|
-| 1 | **Draw the line** — decide what the agent owns vs. what stays human, *before* anything runs | The Agent Line | `01-agent-line/` | Every risky action has a clear owner |
-| 2 | **Make it loop** — turn that hand-off into an agent that fires itself and knows when it's "done" | Loop Engineering | `02-loop-design/` | The agent knows when to run and when to stop ★ |
-| 3 | **Grow the team** — split into a fleet only when there's a real reason, and add a validator | Orchestration | `03-orchestration/` | Nothing advances unchecked ★ |
-| 4 | **Feed it context** — give each run the right memory without leaking or drifting | Context Engineering & Memory | `04-memory-context/` | The agent reasons on the right, safe inputs |
-| 5 | **Bound it & prove it** — design for when it goes sideways, and spec it by writing its evals | Bounds, Trust & Evals | `05-bounds-evals/` | It fails safe and is measured |
-| 6 | **Ship & widen trust** — demo it, reflect, and set how far up the Trust Ladder it may climb | Autonomy & the Trust Ladder | `06-autonomy/` | It runs end-to-end and earns autonomy with evidence ★ |
+## Safety and operating bounds
 
-> **Why the numbers?** The folders keep a leading number so they sort in build order on GitHub; the name after it (`-agent-line`, `-loop-design`, …) is the framework. Number = *when*, name = *what*.
-
----
-
-## How each lab runs: paste the module's `LAB.md` into your AI assistant
-
-Every module folder ships a **`LAB.md`** — a runbook written *for your AI assistant*. Instead of reading a
-guide and filling in a form, you **paste the module's `LAB.md` into your coding agent (Claude Code, Cursor,
-Codex) or a chatbot (ChatGPT, Claude, Gemini)** and it walks you through the lab: it asks for your
-decisions one step at a time, writes the deliverable file, runs Cortex where needed, and commits.
-
-| Module | Paste this into your assistant |
+| Control | Production policy |
 |---|---|
-| M1 | `01-agent-line/LAB.md` |
-| M2 | `02-loop-design/LAB.md` |
-| M3 | `03-orchestration/LAB.md` |
-| M4 | `04-memory-context/LAB.md` |
-| M5 | `05-bounds-evals/LAB.md` |
-| M6 | `06-autonomy/LAB.md` |
+| Iterations | Maximum `8` model/tool steps |
+| Validator revisions | Maximum `2` |
+| Timeout | `90` seconds per run |
+| Cost | `$0.10` hard cap per run |
+| Queue | Maximum `10` proposed stories |
+| Permissions | Standing read-only access; scoped, single-use approval for any write |
+| Kill switch | John Doe can stop runs; Jane Doe owns technical containment and recovery |
 
-A good opener: *"Open `05-bounds-evals/LAB.md` in this repo and walk me through it one step at a time.
-Stop and ask me at every decision."* If your assistant can't read files (plain ChatGPT), paste the
-`LAB.md` contents directly and it will print each block for you to paste into the deliverable file.
+## Promotion gate
 
-> The **prompt pack** in [`00-build/PROMPTS.md`](00-build/PROMPTS.md) is the quick-reference / fallback:
-> the individual prompts the `LAB.md` files use, if you'd rather drive step by step yourself.
+Cortex moves one segment up one rung only after at least `50` runs over `4` consecutive weeks, `>=95%` pass on EV-1 through EV-4, `100%` pass on EV-5 and EV-6, every open replay passing, zero high-severity incidents, a contained near-miss rate below `2%`, at least `80%` first-review acceptance, and at least `50%` lower median PM preparation-plus-review time.
 
----
+## Run the prototype
 
-## Deliverables at a glance
-
-| # | Deliverable | Module | Status | File |
-|---|---|---|---|---|
-| 1 | **Working agent demo** (real run screenshots; link optional) | Built across labs | ☐ | `06-autonomy/prototype.md` |
-| 2 | **Loop Spec** | M2 | ☐ | `02-loop-design/loop-spec.md` |
-| 3 | **Orchestration Map** | M3 | ☐ | `03-orchestration/orchestration-map.md` |
-| 4 | **Insights: build process** | M6 | ☐ | `06-autonomy/build-insights.md` |
-| 5 | **Bounds, trust & autonomy strategy** | M6 | ☐ | `06-autonomy/production-and-autonomy.md` |
-
-## The agent in one sentence
-
-_What does your agent do, for whom, and where is the agent line, what does it decide vs. what stays human?_
-
-## Build & demo
-
-- **How you built it:** _which coding agent (Claude Code / Cursor / Codex) you directed, start in `00-build/`_
-- **Demo link:** _[optional shareable URL]_
-- **Run screenshots:** _required, collected M2 to M6 in `06-autonomy/prototype.md`_
-
-## Where it sits on the Trust Ladder
-
-_shadow · assisted · supervised · bounded-autonomous · autonomous, which rung today, and what eval evidence would let it climb the next one?_
-
----
-
-## How to submit
-
-- Turn the five deliverable files into your final deck (use the **Final Project Deliverables Builder** that ships with the course, it generates `pitch.html` + a clean `README.md` for you, or a tool like Gamma).
-- Submit your own copy to the learning platform within 7 days of your cohort ending.
-
-## Repo structure
-
+```bash
+cd 00-build
+cp .env.example .env
+# Add OPENAI_API_KEY to .env
+python3 -m pip install -r requirements.txt
+python3 agent.py happy
 ```
-pm-os-agent/
-├── README.md                          ← this dashboard
-├── 00-build/                          ← runnable starter: the transparent Cortex agent,
-│   │                                    fixtures, RUNBOOK, PROMPTS, CORTEX-ANATOMY
-│   ├── RUNBOOK.md                     ← open in your coding agent, add a key, run a fixture, screenshot
-│   ├── PROMPTS.md                     ← the prompt pack: what to say to your coding agent
-│   ├── CORTEX-ANATOMY.md              ← the 7 things every submission must show
-│   ├── agent.py · critic.py · tools.py · prompts.py
-│   └── fixtures/                      ← mock PM tasks + project/roadmap/updates/norms data
-├── 01-agent-line/
-│   └── agent-line-map.md              ← M1: what to hand to the agent (above vs below the line)
-├── 02-loop-design/
-│   └── loop-spec.md                   ← M2: the Loop Spec                 ★ Deliverable 2
-├── 03-orchestration/
-│   └── orchestration-map.md           ← M3: your fleet + the validator     ★ Deliverable 3
-├── 04-memory-context/
-│   └── memory-and-context.md          ← M4: retrieve-vs-long-context + your PM brain
-├── 05-bounds-evals/
-│   └── bounds-and-evals.md            ← M5: hard bounds + trajectory evals
-└── 06-autonomy/
-    ├── prototype.md                   ← demo + screenshots                ★ Deliverable 1
-    ├── build-insights.md              ← friction · learning · aha         ★ Deliverable 4
-    └── production-and-autonomy.md     ← dial · Trust Ladder · governance  ★ Deliverable 5
+
+Additional proofs:
+
+```bash
+python3 agent.py missing-data
+python3 agent.py jailbreak
+CORTEX_MAX_ITERATIONS=2 python3 agent.py happy
 ```
+
+The fixtures contain mock product data. A normal run costs a fraction of the `$0.10` cap.
+
+## Capstone artifacts
+
+| Module | Artifact | What it proves |
+|---|---|---|
+| M1 | [`01-agent-line/agent-line-map.md`](01-agent-line/agent-line-map.md) | Risky actions have a human owner |
+| M2 | [`02-loop-design/loop-spec.md`](02-loop-design/loop-spec.md) | The loop has explicit triggers and exits |
+| M3 | [`03-orchestration/orchestration-map.md`](03-orchestration/orchestration-map.md) | An independent validator checks every draft |
+| M4 | [`04-memory-context/memory-and-context.md`](04-memory-context/memory-and-context.md) | Context is current, scoped, and governed |
+| M5 | [`05-bounds-evals/bounds-and-evals.md`](05-bounds-evals/bounds-and-evals.md) | External bounds and trajectory evals fail safely |
+| M6 | [`06-autonomy/production-and-autonomy.md`](06-autonomy/production-and-autonomy.md) | Autonomy widens only through measured evidence |
+
+Supporting M6 deliverables:
+
+- [`06-autonomy/prototype.md`](06-autonomy/prototype.md): real run evidence from M2 through M6
+- [`06-autonomy/build-insights.md`](06-autonomy/build-insights.md): build reflection and lessons
+
+## Status
+
+Cortex is ready for a bounded assisted pilot. It is not yet a supervised or autonomous production agent, and the repository does not claim that the promotion gate has been met.

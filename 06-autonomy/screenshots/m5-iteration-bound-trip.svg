@@ -19,5 +19,5 @@
   <text x="96" y="554" fill="#86efac" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="700">SAFE RESULT</text>
   <text x="96" y="588" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="18">No final draft, publish, wrong send, infinite loop, or excess spend.</text>
 
-  <text x="72" y="650" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="18">Run cost approximately $0.0006 · hard per-run cost cap remained $0.50</text>
+  <text x="72" y="650" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="18">Run cost approximately $0.0006 · hard per-run cost cap is now $0.10</text>
 </svg>

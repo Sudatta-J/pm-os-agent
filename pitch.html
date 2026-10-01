@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cortex: PM Chief-of-Staff Agent</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: #11131b;
+      --line: #303443;
+      --text: #f7f7fb;
+      --muted: #b8bbc7;
+      --orange: #f59e62;
+      --pink: #dc8cc3;
+      --violet: #9775e7;
+      --blue: #5b72f2;
+      --green: #72d6ab;
+      --red: #f08c94;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #05060a;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body { display: grid; place-items: center; }
+
+    .stage {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: 1280px;
+      height: 720px;
+      transform-origin: center center;
+      background: var(--bg);
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 58px 76px 54px;
+      background:
+        linear-gradient(rgba(63, 70, 92, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(63, 70, 92, 0.12) 1px, transparent 1px),
+        var(--bg);
+      background-size: 96px 96px;
+    }
+
+    .slide.active { display: block; }
+
+    .accent-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 66%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--orange), var(--pink), var(--violet), var(--blue));
+    }
+
+    .eyebrow {
+      color: var(--orange);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: 68px; line-height: 1.04; letter-spacing: 0; margin-bottom: 24px; max-width: 1040px; }
+    h2 { font-size: 44px; line-height: 1.08; letter-spacing: 0; margin-bottom: 26px; max-width: 1080px; }
+    h3 { font-size: 22px; line-height: 1.25; letter-spacing: 0; margin-bottom: 10px; }
+    p, li, td, th { font-size: 20px; line-height: 1.45; }
+    p { color: var(--muted); }
+    strong { color: var(--text); }
+    .orange { color: var(--orange); }
+    .violet { color: var(--violet); }
+    .blue { color: var(--blue); }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+
+    .hero-sub { font-size: 28px; line-height: 1.35; max-width: 880px; margin-bottom: 54px; }
+    .presenter { position: absolute; left: 76px; bottom: 58px; color: var(--muted); font-size: 18px; }
+    .decision { position: absolute; right: 76px; bottom: 58px; color: var(--green); font-size: 17px; font-weight: 700; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 54px; align-items: start; }
+    .thirds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; align-items: start; }
+    .rule-block { padding-top: 18px; border-top: 3px solid var(--line); }
+    .orange-rule { border-color: var(--orange); }
+    .violet-rule { border-color: var(--violet); }
+    .blue-rule { border-color: var(--blue); }
+    .green-rule { border-color: var(--green); }
+    .red-rule { border-color: var(--red); }
+    .big-number { font-size: 54px; line-height: 1; font-weight: 750; margin-bottom: 12px; }
+    ul { margin: 0; padding-left: 22px; color: var(--muted); }
+    li { margin: 0 0 10px; }
+    li::marker { color: var(--violet); }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    th { padding: 10px 12px 12px 0; text-align: left; color: var(--orange); border-bottom: 2px solid var(--line); font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    td { padding: 14px 16px 14px 0; color: var(--muted); border-bottom: 1px solid var(--line); vertical-align: top; font-size: 18px; }
+    td:first-child { color: var(--text); font-weight: 700; }
+
+    .flow { display: grid; grid-template-columns: 1fr 70px 1fr 70px 1fr 70px 1fr; align-items: center; margin-top: 52px; }
+    .flow-step { min-height: 178px; padding: 22px 18px; border-top: 4px solid var(--blue); border-bottom: 1px solid var(--line); background: rgba(17, 19, 27, 0.72); }
+    .flow-step:nth-of-type(1) { border-top-color: var(--orange); }
+    .flow-step:nth-of-type(3) { border-top-color: var(--pink); }
+    .flow-step:nth-of-type(5) { border-top-color: var(--violet); }
+    .flow-step:nth-of-type(7) { border-top-color: var(--green); }
+    .connector { height: 1px; background: var(--line); }
+    .flow-step p { font-size: 17px; margin: 0; }
+
+    .ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-items: end; height: 210px; margin-top: 28px; }
+    .rung { display: flex; align-items: flex-end; padding: 14px; border: 1px solid var(--line); color: var(--muted); font-size: 17px; background: rgba(17, 19, 27, 0.76); }
+    .rung:nth-child(1) { height: 70px; }
+    .rung:nth-child(2) { height: 102px; border-color: var(--orange); color: var(--text); }
+    .rung:nth-child(3) { height: 134px; }
+    .rung:nth-child(4) { height: 166px; }
+    .rung:nth-child(5) { height: 198px; }
+
+    .evidence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
+    .evidence-grid figure { margin: 0; min-width: 0; }
+    .evidence-grid img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border: 1px solid var(--line); }
+    .evidence-grid figcaption { margin-top: 7px; color: var(--muted); font-size: 13px; line-height: 1.25; }
+
+    .gate { margin-top: 34px; padding: 24px 28px; border-left: 5px solid var(--green); background: rgba(17, 19, 27, 0.78); color: var(--text); font-size: 23px; line-height: 1.45; }
+    .footer { position: absolute; left: 76px; right: 76px; bottom: 24px; display: flex; justify-content: space-between; color: #777c8c; font-size: 13px; }
+    .controls { position: fixed; right: 18px; top: 50%; display: flex; flex-direction: column; gap: 8px; z-index: 10; transform: translateY(-50%); }
+    .controls button { width: 42px; height: 42px; border: 1px solid #44495a; background: #11131b; color: white; font-size: 20px; cursor: pointer; }
+    .controls button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .progress { position: fixed; left: 0; top: 0; height: 4px; width: 10%; background: var(--orange); z-index: 11; transition: width 160ms ease; }
+    @media (max-width: 600px) {
+      .controls { top: auto; right: 50%; bottom: 24px; flex-direction: row; transform: translateX(50%); }
+    }
+    @media (prefers-reduced-motion: reduce) { .progress { transition: none; } }
+  </style>
+</head>
+<body>
+  <main class="stage" id="stage" aria-live="polite">
+    <section class="slide active" data-title="Cortex">
+      <div class="accent-line"></div><div class="eyebrow">Capstone launch review</div>
+      <h1>Cortex: PM Chief-of-Staff Agent</h1>
+      <p class="hero-sub">Assisted pilot proposal with <span class="orange">evidence-based</span> autonomy gates</p>
+      <div class="gate" style="max-width: 860px;">Recommendation: approve a bounded assisted pilot. Cortex drafts and validates; humans retain commitments, escalation, and publication.</div>
+      <div class="presenter">Sudatta Jeevan · Product Manager</div><div class="decision">Launch review · September 2026</div>
+      <div class="footer"><span>Product School · Agentic Loops for PMs</span><span>1 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Value">
+      <div class="accent-line"></div><div class="eyebrow">The operating problem</div>
+      <h2>Weekly PM synthesis is repetitive, but the judgment is not</h2>
+      <div class="thirds" style="margin-top: 54px;">
+        <div class="rule-block orange-rule"><div class="big-number orange">5+</div><h3>Sources per run</h3><p>Project state, engineering activity, roadmap, norms, and prior updates must agree.</p></div>
+        <div class="rule-block violet-rule"><div class="big-number violet">2</div><h3>Outputs</h3><p>A grounded leadership update and a capped set of next-sprint proposals.</p></div>
+        <div class="rule-block green-rule"><div class="big-number green">1</div><h3>Human decision point</h3><p>The PM reviews context, risk, tone, commitments, and any downstream action.</p></div>
+      </div>
+      <div class="gate">Cortex reduces synthesis work while preserving the judgment that changes priorities or creates commitments.</div>
+      <div class="footer"><span>M1–M2 · Product value and loop</span><span>2 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Agent line">
+      <div class="accent-line"></div><div class="eyebrow">M1 · Agent line</div>
+      <h2>The agent prepares evidence; humans own consequential decisions</h2>
+      <div class="split" style="margin-top: 38px;">
+        <div class="rule-block green-rule"><h3 class="green">Below the line</h3><ul><li>Pull read-only project and engineering evidence</li><li>Select bounded, traceable context with a spot-check</li><li>Draft the update for private review</li><li>Flag risks and propose at most 10 stories</li></ul></div>
+        <div class="rule-block red-rule"><h3 class="red">Above the line</h3><ul><li>Finalize tone or commitment language</li><li>Choose official stakeholder escalations</li><li>Commit a launch date or change incident status</li><li>Publish, write to source systems, or disclose confidential data</li></ul></div>
+      </div>
+      <div class="gate">The boundary stays fixed across segments. The Autonomy Dial changes how often safe work pauses, not who owns high-blast-radius decisions.</div>
+      <div class="footer"><span>Golden rule · reversibility, blast radius, measurability</span><span>3 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Loop and validator">
+      <div class="accent-line"></div><div class="eyebrow">M2–M3 · Loop and orchestration</div>
+      <h2>A small sequential system keeps responsibility legible</h2>
+      <div class="flow">
+        <div class="flow-step"><h3>Trigger</h3><p>Monday cron or approved high-signal event</p></div><div class="connector"></div>
+        <div class="flow-step"><h3>Gather</h3><p>Current, project-scoped evidence from read-only tools</p></div><div class="connector"></div>
+        <div class="flow-step"><h3>Draft</h3><p>Status update plus a capped story proposal</p></div><div class="connector"></div>
+        <div class="flow-step"><h3>Validate</h3><p>Independent critic returns PASS, REVISE, or ESCALATE</p></div>
+      </div>
+      <div class="split" style="margin-top: 38px;"><p><strong>Why only one subagent:</strong> drafting depends on evidence, and validation depends on the draft. Parallel agents would add coordination without useful speed.</p><p><strong>Bounded disagreement:</strong> at most two revisions, then the PM receives the draft, evidence, verdict, and exact stop reason.</p></div>
+      <div class="footer"><span>Topology · Cortex + independent validator</span><span>4 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Context and memory">
+      <div class="accent-line"></div><div class="eyebrow">M4 · Context and memory</div>
+      <h2>Fresh project evidence outranks remembered prose</h2>
+      <table><thead><tr><th style="width:24%">Source</th><th style="width:28%">Treatment</th><th>Control</th></tr></thead><tbody>
+        <tr><td>Task brief</td><td>Full bounded context</td><td>Preserve intent, constraints, and the approval boundary</td></tr>
+        <tr><td>Activity and roadmap</td><td>Retrieve by project</td><td>Grade relevance, verify claims, isolate confidential context</td></tr>
+        <tr><td>Norms</td><td>Retrieve each run</td><td>Cite the active rule; do not rely on remembered policy</td></tr>
+        <tr><td>Past updates</td><td>Retrieve and rerank</td><td>Use for format and precedent; current sources remain authoritative</td></tr>
+        <tr><td>Episodic memory</td><td>90-day TTL</td><td>Store outcomes and evidence IDs, not private reasoning or stale facts</td></tr>
+      </tbody></table>
+      <div class="gate">Credentials, regulated PII, HR records, and unrelated-project confidential data never enter a prompt.</div>
+      <div class="footer"><span>Context budget · retrieve, verify, expire</span><span>5 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Bounds and evals">
+      <div class="accent-line"></div><div class="eyebrow">M5 · Bounds and evals</div>
+      <h2>External controls contain both model error and operating cost</h2>
+      <div class="thirds" style="margin-top: 28px;">
+        <div class="rule-block orange-rule"><div class="big-number orange">8</div><h3>Iterations</h3><p>Two validator revisions, then a held-draft escalation.</p></div>
+        <div class="rule-block violet-rule"><div class="big-number violet">90s</div><h3>Wall-clock deadline</h3><p>Deadline-aware model and critic calls stop the run.</p></div>
+        <div class="rule-block blue-rule"><div class="big-number blue">$0.10</div><h3>Hard run cap</h3><p>Plus a 10-story queue cap and operator kill switch.</p></div>
+      </div>
+      <div class="split" style="margin-top: 34px;"><div><h3>Six trajectory evals</h3><p>Tool accuracy, path quality, recovery, completion, jailbreak refusal, and commitment safety.</p></div><div><h3>Five deterministic replays</h3><p>Happy path, missing data, jailbreak, low cap, and validator near-miss.</p></div></div>
+      <div class="footer"><span>Fail closed · preserve trace · escalate</span><span>6 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Evidence">
+      <div class="accent-line"></div><div class="eyebrow">Prototype evidence</div>
+      <h2>Real runs show success paths, refusals, and bounded stops</h2>
+      <div class="evidence-grid">
+        <figure><img src="06-autonomy/screenshots/m2-task-happy-revision-cap.svg" alt="M2 revision cap trace"><figcaption>M2 · Draft, critic, revision-cap escalation</figcaption></figure>
+        <figure><img src="06-autonomy/screenshots/m2-missing-data-escalation.svg" alt="M2 missing data escalation"><figcaption>M2 · Missing-data handoff</figcaption></figure>
+        <figure><img src="06-autonomy/screenshots/m4-grounded-happy-path.svg" alt="M4 grounded happy path"><figcaption>M4 · Grounded project evidence</figcaption></figure>
+        <figure><img src="06-autonomy/screenshots/m5-jailbreak-refusal.svg" alt="M5 jailbreak refusal"><figcaption>M5 · Injection refused and escalated</figcaption></figure>
+        <figure><img src="06-autonomy/screenshots/m5-iteration-bound-trip.svg" alt="M5 iteration bound trip"><figcaption>M5 · External bound halts the run</figcaption></figure>
+        <figure><img src="06-autonomy/screenshots/m6-end-to-end-assisted-run.svg" alt="M6 end-to-end assisted run"><figcaption>M6 · Full trace, critic catches understated risk</figcaption></figure>
+      </div>
+      <div class="footer"><span>All evidence is fixture-backed and API-run</span><span>7 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Autonomy">
+      <div class="accent-line"></div><div class="eyebrow">M6 · Autonomy Dial</div>
+      <h2>Cortex remains assisted until production evidence earns supervision</h2>
+      <div class="ladder"><div class="rung">Shadow</div><div class="rung"><strong>Assisted<br>Current</strong></div><div class="rung">Supervised</div><div class="rung">Bounded autonomous</div><div class="rung">Autonomous</div></div>
+      <div class="thirds" style="margin-top: 26px;"><div class="rule-block orange-rule"><h3>Experienced PM</h3><p>Target: supervised</p></div><div class="rule-block violet-rule"><h3>New PM</h3><p>Target: assisted</p></div><div class="rule-block blue-rule"><h3>Engineering lead</h3><p>Target: supervised for technical synthesis</p></div></div>
+      <div class="footer"><span>The agent line never moves</span><span>8 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Ship plan">
+      <div class="accent-line"></div><div class="eyebrow">Ship plan and ROI</div>
+      <h2>A serverless assisted pilot creates measurable value with named ownership</h2>
+      <div class="split"><div><div class="rule-block orange-rule"><h3>Operate</h3><p>Monday cron plus approved event hooks. John Doe owns product operations; Jane Doe owns engineering escalation.</p></div><div class="rule-block red-rule" style="margin-top: 26px;"><h3>Contain</h3><p>Kill switch, connector isolation, version rollback, and a one-rung autonomy reduction.</p></div></div><div><table><thead><tr><th>ROI measure</th><th>Four-week target</th></tr></thead><tbody><tr><td>First-review acceptance</td><td>At least 80%</td></tr><tr><td>PM time reduction</td><td>At least 50%</td></tr><tr><td>High-severity incidents</td><td>Zero</td></tr><tr><td>Contained near-misses</td><td>Below 2% of runs</td></tr></tbody></table></div></div>
+      <div class="gate">Fail closed after one transient retry. No automatic model substitution until the backup passes the replay suite.</div>
+      <div class="footer"><span>Serverless · scoped access · layered rollback</span><span>9 / 10</span></div>
+    </section>
+
+    <section class="slide" data-title="Launch decision">
+      <div class="accent-line"></div><div class="eyebrow">Launch decision</div>
+      <h2>Approve the assisted pilot; supervision remains an earned promotion</h2>
+      <div class="gate" style="font-size: 25px; margin-top: 38px;">Promote one segment by one rung only after at least <strong>50 runs over 4 consecutive weeks</strong>, with <strong>≥95%</strong> pass on EV-1 through EV-4, <strong>100%</strong> pass on EV-5 and EV-6, every replay passing, zero high-severity incidents, and the ROI targets met.</div>
+      <div class="thirds" style="margin-top: 52px;"><div class="rule-block green-rule"><h3>Start with</h3><p>Experienced PMs and weekly status drafting</p></div><div class="rule-block orange-rule"><h3>Hold constant</h3><p>Human ownership of commitments, escalation, writes, and publication</p></div><div class="rule-block blue-rule"><h3>Expand after</h3><p>Clean operating evidence and regression-tested near-misses</p></div></div>
+      <div class="decision">Decision requested: approve assisted pilot</div><div class="footer"><span>Cortex · bounded today, wider tomorrow only with proof</span><span>10 / 10</span></div>
+    </section>
+  </main>
+
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <nav class="controls" aria-label="Slide controls"><button id="prev" type="button" aria-label="Previous slide" title="Previous slide">&#8592;</button><button id="next" type="button" aria-label="Next slide" title="Next slide">&#8594;</button></nav>
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const stage = document.getElementById('stage');
+    const progress = document.getElementById('progress');
+    let index = Math.max(0, Math.min(slides.length - 1, Number(location.hash.slice(1)) - 1 || 0));
+    function scaleStage() { const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720); stage.style.transform = `translate(-50%, -50%) scale(${scale})`; }
+    function show(nextIndex) { index = (nextIndex + slides.length) % slides.length; slides.forEach((slide, i) => slide.classList.toggle('active', i === index)); progress.style.width = `${((index + 1) / slides.length) * 100}%`; location.hash = String(index + 1); document.title = `${index + 1}/${slides.length} · ${slides[index].dataset.title}`; }
+    document.getElementById('prev').addEventListener('click', () => show(index - 1));
+    document.getElementById('next').addEventListener('click', () => show(index + 1));
+    window.addEventListener('resize', scaleStage);
+    window.addEventListener('hashchange', () => { const target = Number(location.hash.slice(1)) - 1; if (Number.isInteger(target) && target >= 0 && target < slides.length && target !== index) show(target); });
+    window.addEventListener('keydown', (event) => { if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); show(index + 1); } if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); show(index - 1); } if (event.key === 'Home') show(0); if (event.key === 'End') show(slides.length - 1); });
+    scaleStage(); show(index);
+  </script>
+</body>
+</html>

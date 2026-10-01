@@ -48,7 +48,7 @@ except ImportError:
 MODEL = os.environ.get("CORTEX_MODEL", "gpt-4o-mini")
 MAX_ITERATIONS = int(os.environ.get("CORTEX_MAX_ITERATIONS", "8"))
 MAX_REVISIONS = int(os.environ.get("CORTEX_MAX_REVISIONS", "2"))
-COST_CAP_USD = float(os.environ.get("CORTEX_COST_CAP_USD", "0.50"))
+COST_CAP_USD = float(os.environ.get("CORTEX_COST_CAP_USD", "0.10"))
 MAX_QUEUE_ITEMS = int(os.environ.get("CORTEX_MAX_QUEUE_ITEMS", "10"))
 TIMEOUT_SECONDS = float(os.environ.get("CORTEX_TIMEOUT_SECONDS", "90"))
 KILL_SWITCH_FILE = Path(os.environ.get(

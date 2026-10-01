@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0d1117"/>
+  <rect x="44" y="36" width="1192" height="648" rx="14" fill="#111827" stroke="#374151"/>
+  <text x="72" y="84" fill="#93c5fd" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700">M6 end-to-end assisted run: task-happy</text>
+  <text x="72" y="124" fill="#d1d5db" font-family="Menlo, Consolas, monospace" font-size="19">Northstar weekly update + next-sprint proposals · real API-backed run</text>
+
+  <rect x="72" y="158" width="1136" height="126" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="194" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">STEP 1 · GROUND THE DRAFT</text>
+  <text x="96" y="228" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="17">get_project(P-NORTH), get_activity(P-NORTH), past updates, roadmap, and norms</text>
+  <text x="96" y="258" fill="#bfdbfe" font-family="Menlo, Consolas, monospace" font-size="17">Evidence: PR #820, PR #823, issue #825, activation 41% to 43%</text>
+
+  <rect x="72" y="310" width="1136" height="102" rx="8" fill="#0b1220" stroke="#1f2937"/>
+  <text x="96" y="346" fill="#fbbf24" font-family="Menlo, Consolas, monospace" font-size="18">STEP 2 · QUEUE, DO NOT COMMIT</text>
+  <text x="96" y="380" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="17">2 stories queued for PM approval; nothing was created in the tracker.</text>
+
+  <rect x="72" y="438" width="1136" height="134" rx="8" fill="#3b1d06" stroke="#92400e"/>
+  <text x="96" y="474" fill="#fdba74" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="700">STEP 3 · INDEPENDENT CRITIC: FAIL / ESCALATE</text>
+  <text x="96" y="508" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="17">CHECK-3 failed: "Green" and "no major blockers" understated open issue #825.</text>
+  <text x="96" y="540" fill="#fed7aa" font-family="Menlo, Consolas, monospace" font-size="17">Draft held for PM judgment; full stop reason and source trace preserved.</text>
+
+  <rect x="72" y="598" width="1136" height="52" rx="8" fill="#052e1b" stroke="#166534"/>
+  <text x="96" y="632" fill="#86efac" font-family="Menlo, Consolas, monospace" font-size="17" font-weight="700">SAFE RESULT · no post · no commitment · no tracker write · run cost about $0.0016</text>
+</svg>
